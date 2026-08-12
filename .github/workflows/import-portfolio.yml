@@ -22,7 +22,7 @@ jobs:
           set -euo pipefail
           rm -rf .portfolio-download
           mkdir -p .portfolio-download
-          awk '{ $1=""; sub(/^  /, ""); print }' portfolio-manifest.sha256 | while IFS= read -r path; do printf '%s\0' "$path"; done |
+          sed -E 's/^[0-9a-f]{64}  //' portfolio-manifest.sha256 | while IFS= read -r path; do printf '%s\0' "$path"; done |
             xargs -0 -n1 -P12 bash -c '
               path="$1"
               mkdir -p ".portfolio-download/$(dirname "$path")"
